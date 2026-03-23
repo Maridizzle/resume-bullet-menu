@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Your Resume - Client Intake</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream:     #FAF6EE;
+      --orange:    #E8824A;
+      --orange-dk: #C9622E;
+      --blue:      #5B9BB5;
+      --blue-dk:   #3D7A96;
+      --ink:       #2C2C2C;
+      --muted:     #7A7368;
+      --border:    #E2D9CC;
+      --white:     #FFFFFF;
+      --shadow:    0 4px 24px rgba(44,44,44,0.10);
+      --radius:    12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      font-family: 'Lato', sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── PAINT SPLASH HEADER ── */
+    .header {
+      position: relative;
+      background: var(--cream);
+      padding: 48px 24px 36px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: -80px;
+      width: 340px; height: 260px;
+      background: radial-gradient(ellipse at 30% 60%, #E8824A55 0%, transparent 70%),
+                  radial-gradient(ellipse at 70% 30%, #5B9BB555 0%, transparent 70%);
+      border-radius: 50% 60% 40% 70%;
+      transform: rotate(-12deg);
+      filter: blur(2px);
+      z-index: 0;
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; right: -60px;
+      width: 280px; height: 200px;
+      background: radial-gradient(ellipse at 60% 40%, #E8824A44 0%, transparent 65%),
+                  radial-gradient(ellipse at 30% 70%, #5B9BB544 0%, transparent 65%);
+      border-radius: 60% 40% 70% 30%;
+      transform: rotate(8deg);
+      filter: blur(2px);
+      z-index: 0;
+    }
+
+    .header-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-wrap {
+      display: inline-block;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid var(--white);
+      box-shadow: 0 8px 32px rgba(232,130,74,0.25);
+      margin-bottom: 20px;
+    }
+
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .brand-name span {
+      color: var(--orange);
+      font-style: italic;
+    }
+
+    .tagline {
+      margin-top: 12px;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      font-style: italic;
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--orange), var(--blue));
+      border-radius: 2px;
+      margin: 20px auto 0;
+    }
+
+    /* ── MAIN CARD ── */
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 40px 48px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:nth-child(2) { animation-delay: 0.1s; }
+    .card:nth-child(3) { animation-delay: 0.2s; }
+
+    .section-label {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-label .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px; height: 28px;
+      background: var(--orange);
+      color: var(--white);
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: 'Lato', sans-serif;
+      flex-shrink: 0;
+    }
+
+    .section-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+      padding-left: 38px;
+    }
+
+    /* ── FORM FIELDS ── */
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .field-row.single { grid-template-columns: 1fr; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      color: var(--ink);
+      background: var(--cream);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      width: 100%;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(91,155,181,0.15);
+      background: var(--white);
+    }
+
+    textarea { resize: vertical; min-height: 140px; line-height: 1.6; }
+
+    /* ── RESUME TABS ── */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+      margin-bottom: 16px;
+      width: fit-content;
+    }
+
+    .tab-btn {
+      padding: 9px 22px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      border: none;
+      background: var(--cream);
+      color: var(--muted);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 36px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: var(--cream);
+    }
+
+    .upload-zone:hover {
+      border-color: var(--orange);
+      background: #FDF4EE;
+    }
+
+    .upload-zone.dragging {
+      border-color: var(--blue);
+      background: #EEF5F9;
+    }
+
+    .upload-icon { font-size: 2.4rem; margin-bottom: 10px; }
+
+    .upload-zone p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .upload-zone p strong { color: var(--orange); cursor: pointer; }
+    .upload-zone input { display: none; }
+
+    .file-chosen {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: var(--blue-dk);
+      font-weight: 700;
+    }
+
+    /* ── GENERATE BUTTON ── */
+    .btn-generate {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-dk));
+      color: var(--white);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+      box-shadow: 0 4px 16px rgba(91,155,181,0.35);
+      margin-top: 8px;
+    }
+
+    .btn-generate:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(91,155,181,0.4);
+    }
+
+    .btn-generate:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* ── LOADING SPINNER ── */
+    .spinner-wrap {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 32px 0;
+    }
+
+    .spinner-wrap.visible { display: flex; }
+
+    .spinner {
+      width: 44px; height: 44px;
+      border: 4px solid var(--border);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .spinner-text {
+      font-size: 0.95rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── QUESTIONS SECTION ── */
+    #questions-card {
+      display: none;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    #questions-card.visible { display: block; }
+
+    .question-item {
+      margin-bottom: 20px;
+    }
+
+    .question-item label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ink);
+      text-transform: none;
+      letter-spacing: 0;
+      margin-bottom: 8px;
+      display: block;
+      line-height: 1.5;
+    }
+
+    .question-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px; height: 22px;
+      background: var(--orange);
+      color: var(--white);
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-right: 8px;
+      flex-shrink: 0;
+      vertical-align: middle;
+    }
+
+    /* ── SUBMIT BUTTON ── */
+    .btn-submit {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dk));
+      color: var(--white);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+      box-shadow: 0 4px 16px rgba(232,130,74,0.35);
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(232,130,74,0.4);
+    }
+
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* ── SUCCESS STATE ── */
+    #success-card {
+      display: none;
+      text-align: center;
+      padding: 60px 48px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    #success-card.visible { display: block; }
+
+    .success-icon { font-size: 3.5rem; margin-bottom: 16px; }
+
+    .success-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+
+    .success-msg {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ── ERROR MESSAGE ── */
+    .error-msg {
+      display: none;
+      background: #FFF0ED;
+      border: 1.5px solid #E8824A;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      color: var(--orange-dk);
+      margin-top: 12px;
+    }
+
+    .error-msg.visible { display: block; }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .footer a { color: var(--blue); text-decoration: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .card { padding: 28px 20px; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <!-- Replace the src below with your hosted logo URL after uploading to GitHub -->
+      <img src="LOGO.jpg" alt="Create Your Resume Logo" onerror="this.style.display='none'"/>
+    </div>
+    <h1 class="brand-name">Create <span>Your</span> Resume</h1>
+    <p class="tagline">The Right Words Change Everything. Let's Find Yours.</p>
+    <div class="divider"></div>
+  </div>
+</header>
+
+<!-- MAIN FORM -->
+<div class="container" id="main-form">
+
+  <!-- STEP 1: CONTACT INFO -->
+  <div class="card">
+    <div class="section-label">
+      <span class="step-badge">1</span>
+      Tell Me About You
+    </div>
+    <p class="section-desc">Let's start with the basics so I can personalize your experience.</p>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="client-name">Full Name</label>
+        <input type="text" id="client-name" placeholder="Jane Smith" autocomplete="name"/>
+      </div>
+      <div class="field">
+        <label for="client-email">Email Address</label>
+        <input type="email" id="client-email" placeholder="jane@email.com" autocomplete="email"/>
+      </div>
+    </div>
+
+    <div class="field-row single">
+      <div class="field">
+        <label for="job-title">Target Job Title or Industry</label>
+        <input type="text" id="job-title" placeholder="e.g. Project Manager, Healthcare, Senior Marketing Director"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: RESUME INPUT -->
+  <div class="card">
+    <div class="section-label">
+      <span class="step-badge">2</span>
+      Share Your Current Resume
+    </div>
+    <p class="section-desc">Paste your resume text or upload a file. This helps me ask the right questions for your specific background.</p>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('paste')">Paste Text</button>
+      <button class="tab-btn" onclick="switchTab('upload')">Upload File</button>
+    </div>
+
+    <!-- PASTE TAB -->
+    <div class="tab-panel active" id="tab-paste">
+      <div class="field">
+        <textarea id="resume-text" placeholder="Paste your current resume here. Don't have one yet? That's okay — just describe your recent work history and job titles."></textarea>
+      </div>
+    </div>
+
+    <!-- UPLOAD TAB -->
+    <div class="tab-panel" id="tab-upload">
+      <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+        <div class="upload-icon">📄</div>
+        <p>Drag and drop your resume here, or <strong>browse to upload</strong></p>
+        <p style="margin-top:6px; font-size:0.8rem;">Accepts PDF or Word (.docx) files</p>
+        <p class="file-chosen" id="file-name"></p>
+        <input type="file" id="file-input" accept=".pdf,.doc,.docx" onchange="handleFileSelect(event)"/>
+      </div>
+    </div>
+
+    <div id="spinner-wrap" class="spinner-wrap">
+      <div class="spinner"></div>
+      <p class="spinner-text">Analyzing your background and crafting your questions...</p>
+    </div>
+
+    <div id="generate-error" class="error-msg"></div>
+
+    <button class="btn-generate" id="btn-generate" onclick="generateQuestions()">
+      Generate My Personalized Questions →
+    </button>
+  </div>
+
+  <!-- STEP 3: AI QUESTIONS -->
+  <div class="card" id="questions-card">
+    <div class="section-label">
+      <span class="step-badge">3</span>
+      Your Personalized Questions
+    </div>
+    <p class="section-desc">Based on your background and target role, please answer each question as thoroughly as you can. The more detail you give, the better your resume bullets will be.</p>
+
+    <div id="questions-list"></div>
+
+    <div id="submit-error" class="error-msg"></div>
+
+    <button class="btn-submit" id="btn-submit" onclick="submitAnswers()">
+      Submit My Answers
+    </button>
+  </div>
+
+</div>
+
+<!-- SUCCESS STATE -->
+<div class="container" id="success-card">
+  <div class="card">
+    <div class="success-icon">✨</div>
+    <h2 class="success-title">You're all set!</h2>
+    <p class="success-msg">
+      Thank you for trusting me with your career story. I have everything I need and will be in touch shortly with your polished resume bullets.<br/><br/>
+      Questions in the meantime? Reach me at <a href="mailto:Maride@CreateYourResume.net">Maride@CreateYourResume.net</a>
+    </p>
+  </div>
+</div>
+
+<footer class="footer">
+  &copy; 2025 <a href="https://www.createyourresume.net" target="_blank">Create Your Resume</a> &nbsp;|&nbsp; Maride &nbsp;|&nbsp; (360) 265-6823
+</footer>
+
+<script>
+  // ── REPLACE THIS WITH YOUR APPS SCRIPT WEB APP URL ──
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxoL6xZmx_9zSRbvQZIq84sCjk3ju4PeyZLJAlKWS3v7W_W15RfROp6gD9RztlbmKdDSA/exec';
+
+  let activeTab = 'paste';
+  let uploadedFileText = '';
+  let generatedQuestions = [];
+
+  // ── TAB SWITCHING ──
+  function switchTab(tab) {
+    activeTab = tab;
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', (i === 0 && tab === 'paste') || (i === 1 && tab === 'upload'));
+    });
+    document.getElementById('tab-paste').classList.toggle('active', tab === 'paste');
+    document.getElementById('tab-upload').classList.toggle('active', tab === 'upload');
+  }
+
+  // ── FILE UPLOAD HANDLING ──
+  function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    document.getElementById('file-name').textContent = '✓ ' + file.name;
+    readFileAsText(file);
+  }
+
+  const dropZone = document.getElementById('drop-zone');
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragging'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragging'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragging');
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      document.getElementById('file-name').textContent = '✓ ' + file.name;
+      readFileAsText(file);
+    }
+  });
+
+  function readFileAsText(file) {
+    const reader = new FileReader();
+    reader.onload = e => { uploadedFileText = e.target.result; };
+    reader.readAsText(file);
+  }
+
+  // ── GET RESUME CONTENT ──
+  function getResumeContent() {
+    if (activeTab === 'paste') {
+      return document.getElementById('resume-text').value.trim();
+    }
+    return uploadedFileText.trim();
+  }
+
+  // ── VALIDATE STEP 1 ──
+  function validateStep1() {
+    const name = document.getElementById('client-name').value.trim();
+    const email = document.getElementById('client-email').value.trim();
+    const jobTitle = document.getElementById('job-title').value.trim();
+    if (!name) return 'Please enter your full name.';
+    if (!email || !email.includes('@')) return 'Please enter a valid email address.';
+    if (!jobTitle) return 'Please enter your target job title or industry.';
+    return null;
+  }
+
+  // ── GENERATE QUESTIONS ──
+  async function generateQuestions() {
+    const validationError = validateStep1();
+    if (validationError) {
+      showError('generate-error', validationError);
+      return;
+    }
+
+    const resume = getResumeContent();
+    if (!resume) {
+      showError('generate-error', 'Please paste your resume text or upload a file before continuing.');
+      return;
+    }
+
+    hideError('generate-error');
+    setLoading(true);
+
+    try {
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'generateQuestions',
+          jobTitle: document.getElementById('job-title').value.trim(),
+          resume: resume
+        })
+      });
+
+      const data = await response.json();
+
+      if (!data.success) throw new Error('Server error generating questions.');
+
+      let questions = data.questions;
+      if (typeof questions === 'string') {
+        questions = JSON.parse(questions.replace(/```json|```/g, '').trim());
+      }
+
+      generatedQuestions = questions;
+      renderQuestions(questions);
+
+    } catch (err) {
+      showError('generate-error', 'Something went wrong generating your questions. Please try again or contact Maride directly.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // ── RENDER QUESTIONS ──
+  function renderQuestions(questions) {
+    const list = document.getElementById('questions-list');
+    list.innerHTML = '';
+
+    questions.forEach((q, i) => {
+      const item = document.createElement('div');
+      item.className = 'question-item';
+      item.innerHTML = `
+        <label for="q-${i}">
+          <span class="question-num">${i + 1}</span>${q}
+        </label>
+        <textarea id="q-${i}" placeholder="Your answer here..." rows="3"></textarea>
+      `;
+      list.appendChild(item);
+    });
+
+    const card = document.getElementById('questions-card');
+    card.classList.add('visible');
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── SUBMIT ANSWERS ──
+  async function submitAnswers() {
+    const answers = generatedQuestions.map((q, i) => {
+      const val = document.getElementById(`q-${i}`).value.trim();
+      return `Q${i + 1}: ${q}\nA: ${val}`;
+    });
+
+    const unanswered = generatedQuestions.filter((_, i) =>
+      !document.getElementById(`q-${i}`).value.trim()
+    );
+
+    if (unanswered.length > 0) {
+      showError('submit-error', 'Please answer all questions before submitting.');
+      return;
+    }
+
+    hideError('submit-error');
+    document.getElementById('btn-submit').disabled = true;
+    document.getElementById('btn-submit').textContent = 'Submitting...';
+
+    try {
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'submitAnswers',
+          name: document.getElementById('client-name').value.trim(),
+          email: document.getElementById('client-email').value.trim(),
+          jobTitle: document.getElementById('job-title').value.trim(),
+          resume: getResumeContent(),
+          answersText: answers.join('\n\n')
+        })
+      });
+
+      const data = await response.json();
+      if (!data.success) throw new Error('Submission failed.');
+
+      document.getElementById('main-form').style.display = 'none';
+      const successCard = document.getElementById('success-card');
+      successCard.classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+      showError('submit-error', 'Something went wrong submitting your answers. Please try again or email Maride directly.');
+      document.getElementById('btn-submit').disabled = false;
+      document.getElementById('btn-submit').textContent = 'Submit My Answers';
+      console.error(err);
+    }
+  }
+
+  // ── HELPERS ──
+  function setLoading(on) {
+    document.getElementById('spinner-wrap').classList.toggle('visible', on);
+    document.getElementById('btn-generate').disabled = on;
+    document.getElementById('btn-generate').textContent = on
+      ? 'Generating your questions...'
+      : 'Generate My Personalized Questions →';
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+
+  function hideError(id) {
+    document.getElementById(id).classList.remove('visible');
+  }
+</script>
+</body>
+</html>
