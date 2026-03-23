@@ -590,14 +590,12 @@
 </footer>
 
 <script>
-  // ── REPLACE THIS WITH YOUR APPS SCRIPT WEB APP URL ──
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxoL6xZmx_9zSRbvQZIq84sCjk3ju4PeyZLJAlKWS3v7W_W15RfROp6gD9RztlbmKdDSA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxoL6xZmx_9zSRbvQZIq84sCjk3ju4PeyZLJAlKWS3v7W_W15RfROp6gD9RztlbmKdDSA/exec';
 
   let activeTab = 'paste';
   let uploadedFileText = '';
   let generatedQuestions = [];
 
-  // ── TAB SWITCHING ──
   function switchTab(tab) {
     activeTab = tab;
     document.querySelectorAll('.tab-btn').forEach((b, i) => {
@@ -607,7 +605,6 @@
     document.getElementById('tab-upload').classList.toggle('active', tab === 'upload');
   }
 
-  // ── FILE UPLOAD HANDLING ──
   function handleFileSelect(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -634,7 +631,6 @@
     reader.readAsText(file);
   }
 
-  // ── GET RESUME CONTENT ──
   function getResumeContent() {
     if (activeTab === 'paste') {
       return document.getElementById('resume-text').value.trim();
@@ -642,7 +638,6 @@
     return uploadedFileText.trim();
   }
 
-  // ── VALIDATE STEP 1 ──
   function validateStep1() {
     const name = document.getElementById('client-name').value.trim();
     const email = document.getElementById('client-email').value.trim();
@@ -653,13 +648,9 @@
     return null;
   }
 
-  // ── GENERATE QUESTIONS ──
   async function generateQuestions() {
     const validationError = validateStep1();
-    if (validationError) {
-      showError('generate-error', validationError);
-      return;
-    }
+    if (validationError) { showError('generate-error', validationError); return; }
 
     const resume = getResumeContent();
     if (!resume) {
@@ -671,12 +662,9 @@
     setLoading(true);
 
     try {
-     const response = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      headers: {},
-      mode: 'no-cors',
-      mode: 'no-cors',
-      mode: 'no-cors',
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'generateQuestions',
           jobTitle: document.getElementById('job-title').value.trim(),
@@ -685,7 +673,6 @@
       });
 
       const data = await response.json();
-
       if (!data.success) throw new Error('Server error generating questions.');
 
       let questions = data.questions;
@@ -704,11 +691,9 @@
     }
   }
 
-  // ── RENDER QUESTIONS ──
   function renderQuestions(questions) {
     const list = document.getElementById('questions-list');
     list.innerHTML = '';
-
     questions.forEach((q, i) => {
       const item = document.createElement('div');
       item.className = 'question-item';
@@ -720,13 +705,11 @@
       `;
       list.appendChild(item);
     });
-
     const card = document.getElementById('questions-card');
     card.classList.add('visible');
     card.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  // ── SUBMIT ANSWERS ──
   async function submitAnswers() {
     const answers = generatedQuestions.map((q, i) => {
       const val = document.getElementById(`q-${i}`).value.trim();
@@ -749,7 +732,7 @@
     try {
       const response = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'submitAnswers',
           name: document.getElementById('client-name').value.trim(),
@@ -764,8 +747,7 @@
       if (!data.success) throw new Error('Submission failed.');
 
       document.getElementById('main-form').style.display = 'none';
-      const successCard = document.getElementById('success-card');
-      successCard.classList.add('visible');
+      document.getElementById('success-card').classList.add('visible');
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
     } catch (err) {
@@ -776,7 +758,6 @@
     }
   }
 
-  // ── HELPERS ──
   function setLoading(on) {
     document.getElementById('spinner-wrap').classList.toggle('visible', on);
     document.getElementById('btn-generate').disabled = on;
