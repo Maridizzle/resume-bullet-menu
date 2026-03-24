@@ -1,554 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Create Your Resume - Client Intake</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --cream:     #FAF6EE;
-      --orange:    #E8824A;
-      --orange-dk: #C9622E;
-      --blue:      #5B9BB5;
-      --blue-dk:   #3D7A96;
-      --ink:       #2C2C2C;
-      --muted:     #7A7368;
-      --border:    #E2D9CC;
-      --white:     #FFFFFF;
-      --shadow:    0 4px 24px rgba(44,44,44,0.10);
-      --radius:    12px;
+      --cream:#FAF6EE;--orange:#E8824A;--orange-dk:#C9622E;--blue:#5B9BB5;--blue-dk:#3D7A96;
+      --ink:#2C2C2C;--muted:#7A7368;--border:#E2D9CC;--white:#FFFFFF;
+      --green:#4A9B6F;--green-lt:#EAF5EE;--yellow-lt:#FDF8EE;--yellow:#C9962A;
+      --shadow:0 4px 24px rgba(44,44,44,0.10);--radius:12px;
     }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--cream);
-      font-family: 'Lato', sans-serif;
-      color: var(--ink);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ── HEADER ── */
-    .header {
-      position: relative;
-      background: var(--cream);
-      padding: 48px 24px 36px;
-      text-align: center;
-      overflow: hidden;
-    }
-
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -60px; left: -80px;
-      width: 340px; height: 260px;
-      background: radial-gradient(ellipse at 30% 60%, #E8824A55 0%, transparent 70%),
-                  radial-gradient(ellipse at 70% 30%, #5B9BB555 0%, transparent 70%);
-      border-radius: 50% 60% 40% 70%;
-      transform: rotate(-12deg);
-      filter: blur(2px);
-      z-index: 0;
-    }
-
-    .header::after {
-      content: '';
-      position: absolute;
-      bottom: -40px; right: -60px;
-      width: 280px; height: 200px;
-      background: radial-gradient(ellipse at 60% 40%, #E8824A44 0%, transparent 65%),
-                  radial-gradient(ellipse at 30% 70%, #5B9BB544 0%, transparent 65%);
-      border-radius: 60% 40% 70% 30%;
-      transform: rotate(8deg);
-      filter: blur(2px);
-      z-index: 0;
-    }
-
-    .header-inner { position: relative; z-index: 1; }
-
-    .logo-wrap {
-      display: inline-block;
-      width: 160px; height: 160px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 4px solid var(--white);
-      box-shadow: 0 8px 32px rgba(232,130,74,0.25);
-      margin-bottom: 20px;
-    }
-
-    .logo-wrap img { width: 100%; height: 100%; object-fit: cover; }
-
-    .brand-name {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 700;
-      color: var(--blue);
-      letter-spacing: -0.5px;
-      line-height: 1.1;
-    }
-
-    .brand-name span { color: var(--blue-dk); font-style: italic; }
-
-    .tagline {
-      margin-top: 12px;
-      font-size: 1rem;
-      font-weight: 300;
-      color: var(--orange);
-      letter-spacing: 0.5px;
-      font-style: italic;
-    }
-
-    .divider {
-      width: 60px; height: 3px;
-      background: linear-gradient(90deg, var(--orange), var(--blue));
-      border-radius: 2px;
-      margin: 20px auto 0;
-    }
-
-    /* ── CONTAINER ── */
-    .container {
-      max-width: 820px;
-      margin: 0 auto;
-      padding: 0 20px 60px;
-    }
-
-    .card {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 40px 48px;
-      margin-bottom: 24px;
-      border: 1px solid var(--border);
-      animation: fadeUp 0.5s ease both;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── HEADINGS AND LABELS ── */
-    .section-label {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--blue);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .step-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px; height: 28px;
-      background: var(--blue);
-      color: var(--white);
-      border-radius: 50%;
-      font-size: 0.8rem;
-      font-weight: 700;
-      font-family: 'Lato', sans-serif;
-      flex-shrink: 0;
-    }
-
-    .section-desc {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 24px;
-      padding-left: 38px;
-    }
-
-    label {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--blue);
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-    }
-
-    /* ── INPUTS ── */
-    .field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    .field-row.single { grid-template-columns: 1fr; }
-
-    .field { display: flex; flex-direction: column; gap: 6px; }
-
-    input[type="text"],
-    input[type="email"],
-    textarea {
-      font-family: 'Lato', sans-serif;
-      font-size: 0.95rem;
-      color: var(--ink);
-      background: var(--cream);
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 14px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
-      width: 100%;
-    }
-
-    input::placeholder, textarea::placeholder {
-      color: var(--orange);
-      opacity: 0.75;
-    }
-
-    input:focus, textarea:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(91,155,181,0.15);
-      background: var(--white);
-    }
-
-    textarea { resize: vertical; min-height: 140px; line-height: 1.6; }
-
-    /* ── TABS ── */
-    .tab-bar {
-      display: flex;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1.5px solid var(--border);
-      margin-bottom: 16px;
-      width: fit-content;
-    }
-
-    .tab-btn {
-      padding: 9px 22px;
-      font-family: 'Lato', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-      cursor: pointer;
-      border: none;
-      background: var(--cream);
-      color: var(--muted);
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .tab-btn.active { background: var(--blue); color: var(--white); }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    /* ── UPLOAD ZONE ── */
-    .upload-zone {
-      border: 2px dashed var(--border);
-      border-radius: 8px;
-      padding: 36px 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      background: var(--cream);
-    }
-
-    .upload-zone:hover { border-color: var(--orange); background: #FDF4EE; }
-    .upload-zone.dragging { border-color: var(--blue); background: #EEF5F9; }
-    .upload-icon { font-size: 2.4rem; margin-bottom: 10px; }
-    .upload-zone p { color: var(--muted); font-size: 0.9rem; }
-    .upload-zone p strong { color: var(--orange); cursor: pointer; }
-    .upload-zone input { display: none; }
-    .file-chosen { margin-top: 10px; font-size: 0.85rem; color: var(--blue-dk); font-weight: 700; }
-
-    /* ── BUTTONS ── */
-    .btn-generate {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dk));
-      color: var(--white);
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.1rem;
-      font-style: italic;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
-      box-shadow: 0 4px 16px rgba(91,155,181,0.35);
-      margin-top: 8px;
-    }
-
-    .btn-generate:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(91,155,181,0.4);
-    }
-
-    .btn-generate:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    .btn-submit {
-      width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, var(--orange), var(--orange-dk));
-      color: var(--white);
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.15rem;
-      font-style: italic;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
-      box-shadow: 0 4px 16px rgba(232,130,74,0.35);
-      margin-top: 24px;
-    }
-
-    .btn-submit:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(232,130,74,0.4);
-    }
-
-    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    /* ── SPINNER ── */
-    .spinner-wrap {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      padding: 32px 0;
-    }
-
-    .spinner-wrap.visible { display: flex; }
-
-    .spinner {
-      width: 44px; height: 44px;
-      border: 4px solid var(--border);
-      border-top-color: var(--orange);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .spinner-text { font-size: 0.95rem; color: var(--muted); font-style: italic; }
-
-    /* ── JOB SECTION ── */
-    .job-block {
-      margin-bottom: 40px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .job-header {
-      background: linear-gradient(135deg, var(--blue), var(--blue-dk));
-      padding: 18px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .job-title-text {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--white);
-    }
-
-    .job-years {
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.8);
-      font-weight: 300;
-    }
-
-    .job-badge {
-      font-size: 0.72rem;
-      background: rgba(255,255,255,0.2);
-      color: var(--white);
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    .job-body { padding: 24px; }
-
-    /* ── CHECKLIST SUBSECTIONS ── */
-    .checklist-section {
-      margin-bottom: 28px;
-    }
-
-    .checklist-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--blue);
-      margin-bottom: 4px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--border);
-    }
-
-    .checklist-subtitle {
-      font-size: 0.78rem;
-      color: var(--orange);
-      margin-bottom: 14px;
-      font-style: italic;
-    }
-
-    /* ── RATING ITEMS ── */
-    .rating-item {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 16px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .rating-item:last-child { border-bottom: none; }
-
-    .rating-item-left { display: flex; flex-direction: column; gap: 2px; }
-
-    .rating-item-text {
-      font-size: 0.9rem;
-      color: var(--ink);
-      font-weight: 400;
-      line-height: 1.4;
-    }
-
-    .rating-item-note {
-      font-size: 0.72rem;
-      color: var(--orange);
-      font-style: italic;
-    }
-
-    .rating-item-real {
-      font-size: 0.72rem;
-      color: var(--blue);
-      font-weight: 700;
-      letter-spacing: 0.3px;
-    }
-
-    .rating-right {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      min-width: 120px;
-    }
-
-    .rating-label-row {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    .rating-label-row span {
-      font-size: 0.68rem;
-      color: var(--muted);
-    }
-
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--blue);
-      cursor: pointer;
-    }
-
-    .rating-value {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--blue);
-      min-width: 24px;
-      text-align: center;
-    }
-
-    /* ── ESSAY QUESTIONS ── */
-    .essay-item {
-      margin-bottom: 24px;
-    }
-
-    .essay-label {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--blue);
-      margin-bottom: 8px;
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      line-height: 1.5;
-      text-transform: none;
-      letter-spacing: 0;
-    }
-
-    .essay-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px; height: 24px;
-      background: var(--orange);
-      color: var(--white);
-      border-radius: 50%;
-      font-size: 0.72rem;
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    /* ── ERROR ── */
-    .error-msg {
-      display: none;
-      background: #FFF0ED;
-      border: 1.5px solid var(--orange);
-      border-radius: 8px;
-      padding: 12px 16px;
-      font-size: 0.88rem;
-      color: var(--orange-dk);
-      margin-top: 12px;
-    }
-
-    .error-msg.visible { display: block; }
-
-    /* ── SUCCESS ── */
-    #success-card {
-      display: none;
-      text-align: center;
-      padding: 60px 48px;
-      animation: fadeUp 0.5s ease both;
-    }
-
-    #success-card.visible { display: block; }
-    .success-icon { font-size: 3.5rem; margin-bottom: 16px; }
-
-    .success-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--blue);
-      margin-bottom: 12px;
-    }
-
-    .success-msg {
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.7;
-      max-width: 480px;
-      margin: 0 auto;
-    }
-
-    /* ── INTAKE CARD HIDDEN BY DEFAULT ── */
-    #intake-card { display: none; }
-    #intake-card.visible { display: block; animation: fadeUp 0.5s ease both; }
-
-    /* ── FOOTER ── */
-    .footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    .footer a { color: var(--blue); text-decoration: none; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 600px) {
-      .card { padding: 28px 20px; }
-      .field-row { grid-template-columns: 1fr; }
-      .rating-item { grid-template-columns: 1fr; }
-      .rating-right { min-width: unset; width: 100%; }
-    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--cream);font-family:'Lato',sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;}
+    .header{position:relative;background:var(--cream);padding:48px 24px 36px;text-align:center;overflow:hidden;}
+    .header::before{content:'';position:absolute;top:-60px;left:-80px;width:340px;height:260px;background:radial-gradient(ellipse at 30% 60%,#E8824A55 0%,transparent 70%),radial-gradient(ellipse at 70% 30%,#5B9BB555 0%,transparent 70%);border-radius:50% 60% 40% 70%;transform:rotate(-12deg);filter:blur(2px);z-index:0;}
+    .header::after{content:'';position:absolute;bottom:-40px;right:-60px;width:280px;height:200px;background:radial-gradient(ellipse at 60% 40%,#E8824A44 0%,transparent 65%),radial-gradient(ellipse at 30% 70%,#5B9BB544 0%,transparent 65%);border-radius:60% 40% 70% 30%;transform:rotate(8deg);filter:blur(2px);z-index:0;}
+    .header-inner{position:relative;z-index:1;}
+    .logo-wrap{display:inline-block;width:160px;height:160px;border-radius:50%;overflow:hidden;border:4px solid var(--white);box-shadow:0 8px 32px rgba(232,130,74,0.25);margin-bottom:20px;}
+    .logo-wrap img{width:100%;height:100%;object-fit:cover;}
+    .brand-name{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;color:var(--blue);letter-spacing:-0.5px;line-height:1.1;}
+    .brand-name span{color:var(--blue-dk);font-style:italic;}
+    .tagline{margin-top:12px;font-size:1rem;font-weight:300;color:var(--orange);letter-spacing:0.5px;font-style:italic;}
+    .divider{width:60px;height:3px;background:linear-gradient(90deg,var(--orange),var(--blue));border-radius:2px;margin:20px auto 0;}
+    .container{max-width:820px;margin:0 auto;padding:0 20px 60px;}
+    .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:40px 48px;margin-bottom:24px;border:1px solid var(--border);animation:fadeUp 0.5s ease both;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    .section-label{font-family:'Playfair Display',Georgia,serif;font-size:1.3rem;font-weight:700;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+    .step-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--blue);color:var(--white);border-radius:50%;font-size:0.8rem;font-weight:700;font-family:'Lato',sans-serif;flex-shrink:0;}
+    .section-desc{font-size:0.9rem;color:var(--muted);margin-bottom:24px;padding-left:38px;}
+    label{font-size:0.82rem;font-weight:700;color:var(--blue);letter-spacing:0.6px;text-transform:uppercase;}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    .field-row.single{grid-template-columns:1fr;}
+    .field{display:flex;flex-direction:column;gap:6px;}
+    input[type="text"],input[type="email"],textarea{font-family:'Lato',sans-serif;font-size:0.95rem;color:var(--ink);background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;transition:border-color 0.2s,box-shadow 0.2s;outline:none;width:100%;}
+    input::placeholder,textarea::placeholder{color:var(--orange);opacity:0.75;}
+    input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,155,181,0.15);background:var(--white);}
+    textarea{resize:vertical;min-height:100px;line-height:1.6;}
+    .load-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:40px 24px;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;background:var(--cream);}
+    .load-zone:hover{border-color:var(--blue);background:#EEF5F9;}
+    .load-zone.loaded{border-color:var(--green);background:var(--green-lt);cursor:default;}
+    .load-zone.dragging{border-color:var(--orange);background:#FDF4EE;}
+    .load-icon{font-size:2.6rem;margin-bottom:12px;}
+    .load-zone p{color:var(--muted);font-size:0.9rem;line-height:1.6;}
+    .load-zone p strong{color:var(--blue);}
+    .load-zone input{display:none;}
+    .load-success{font-size:0.9rem;color:var(--green);font-weight:700;margin-top:10px;display:none;}
+    #intake-section{display:none;}
+    #intake-section.visible{display:block;animation:fadeUp 0.5s ease both;}
+    .job-block{border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:24px;overflow:hidden;}
+    .job-head{background:linear-gradient(135deg,var(--blue),var(--blue-dk));padding:16px 24px;display:flex;justify-content:space-between;align-items:center;}
+    .job-head-title{font-family:'Playfair Display',Georgia,serif;font-size:1.05rem;font-weight:700;color:var(--white);}
+    .job-head-years{font-size:0.8rem;color:rgba(255,255,255,0.75);margin-top:3px;}
+    .job-badge{font-size:0.68rem;font-weight:700;letter-spacing:0.5px;background:rgba(255,255,255,0.2);color:var(--white);padding:3px 10px;border-radius:20px;white-space:nowrap;}
+    .job-body{padding:24px;background:var(--white);}
+    .sub-section{margin-bottom:28px;}
+    .sub-title{font-size:0.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.6px;border-bottom:1.5px solid var(--border);padding-bottom:6px;margin-bottom:6px;}
+    .sub-hint{font-size:0.78rem;color:var(--orange);font-style:italic;margin-bottom:12px;}
+    .rating-item{display:grid;grid-template-columns:1fr 200px;align-items:center;gap:20px;padding:10px 0;border-bottom:1px solid var(--border);}
+    .rating-item:last-child{border-bottom:none;}
+    .rating-text{font-size:0.9rem;color:var(--ink);line-height:1.4;}
+    .badge-real{font-size:0.68rem;font-weight:700;background:var(--green-lt);color:var(--green);padding:1px 7px;border-radius:20px;margin-left:6px;vertical-align:middle;}
+    .badge-suggested{font-size:0.68rem;font-weight:700;background:var(--yellow-lt);color:var(--yellow);padding:1px 7px;border-radius:20px;margin-left:6px;vertical-align:middle;}
+    .rating-control{display:flex;flex-direction:column;align-items:stretch;gap:4px;}
+    .rating-labels{display:flex;justify-content:space-between;}
+    .rating-labels span{font-size:0.65rem;color:var(--muted);}
+    input[type="range"]{width:100%;accent-color:var(--blue);cursor:pointer;}
+    .rating-value{text-align:center;font-size:0.8rem;font-weight:700;color:var(--blue);}
+    .essay-item{margin-bottom:20px;}
+    .essay-q{font-size:0.9rem;font-weight:700;color:var(--blue);margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;line-height:1.5;}
+    .essay-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--orange);color:var(--white);border-radius:50%;font-size:0.72rem;font-weight:700;flex-shrink:0;margin-top:1px;}
+    .btn-submit{width:100%;padding:18px;background:linear-gradient(135deg,var(--orange),var(--orange-dk));color:var(--white);font-family:'Playfair Display',Georgia,serif;font-size:1.15rem;font-style:italic;border:none;border-radius:var(--radius);cursor:pointer;transition:transform 0.15s,box-shadow 0.15s,opacity 0.2s;box-shadow:0 4px 16px rgba(232,130,74,0.35);margin-top:16px;}
+    .btn-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,130,74,0.4);}
+    .btn-submit:disabled{opacity:0.6;cursor:not-allowed;}
+    .error-msg{display:none;background:#FFF0ED;border:1.5px solid var(--orange);border-radius:8px;padding:12px 16px;font-size:0.88rem;color:var(--orange-dk);margin-top:12px;}
+    .error-msg.visible{display:block;}
+    #success-card{display:none;}
+    #success-card.visible{display:block;animation:fadeUp 0.5s ease both;}
+    .success-icon{font-size:3.5rem;margin-bottom:16px;text-align:center;}
+    .success-title{font-family:'Playfair Display',Georgia,serif;font-size:1.8rem;font-weight:700;color:var(--blue);margin-bottom:12px;text-align:center;}
+    .success-msg{color:var(--muted);font-size:1rem;line-height:1.7;max-width:480px;margin:0 auto;text-align:center;}
+    .footer{text-align:center;padding:20px;font-size:0.8rem;color:var(--muted);}
+    .footer a{color:var(--blue);text-decoration:none;}
+    @media(max-width:600px){.card{padding:28px 20px;}.field-row{grid-template-columns:1fr;}.rating-item{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
@@ -556,7 +91,7 @@
 <header class="header">
   <div class="header-inner">
     <div class="logo-wrap">
-      <img src="LOGO.jpg" alt="Create Your Resume Logo" onerror="this.style.display='none'"/>
+      <img src="LOGO.jpg" alt="Create Your Resume" onerror="this.style.display='none'"/>
     </div>
     <h1 class="brand-name">Create <span>Your</span> Resume</h1>
     <p class="tagline">The Right Words Change Everything. Let's Find Yours.</p>
@@ -564,16 +99,12 @@
   </div>
 </header>
 
-<div class="container" id="main-form">
+<div id="main-form">
+<div class="container">
 
-  <!-- STEP 1: CONTACT INFO -->
   <div class="card">
-    <div class="section-label">
-      <span class="step-badge">1</span>
-      Tell Me About You
-    </div>
-    <p class="section-desc">Let's start with the basics so I can personalize your experience.</p>
-
+    <div class="section-label"><span class="step-badge">1</span>Tell Me About You</div>
+    <p class="section-desc">Let's start with the basics.</p>
     <div class="field-row">
       <div class="field">
         <label for="client-name">Full Name</label>
@@ -584,111 +115,59 @@
         <input type="email" id="client-email" placeholder="jane@email.com" autocomplete="email"/>
       </div>
     </div>
-
-    <div class="field-row single">
-      <div class="field">
-        <label for="job-title">Target Job Title or Industry</label>
-        <input type="text" id="job-title" placeholder="e.g. Project Manager, Healthcare, Senior Marketing Director"/>
-      </div>
-    </div>
   </div>
 
-  <!-- STEP 2: RESUME INPUT -->
   <div class="card">
-    <div class="section-label">
-      <span class="step-badge">2</span>
-      Share Your Current Resume
+    <div class="section-label"><span class="step-badge">2</span>Load Your Intake Form</div>
+    <p class="section-desc">Your resume writer will send you a personalized intake file. Upload it here to get started.</p>
+    <div class="load-zone" id="load-zone" onclick="document.getElementById('json-input').click()">
+      <div class="load-icon">📋</div>
+      <p>Click to upload your intake file, or drag and drop it here</p>
+      <p style="margin-top:6px;font-size:0.8rem;">Accepts <strong>.json</strong> files only</p>
+      <p class="load-success" id="load-success"></p>
+      <input type="file" id="json-input" accept=".json" onchange="loadIntakeFile(event)"/>
     </div>
-    <p class="section-desc">Paste your resume text or upload a file. This helps me build your personalized intake checklist.</p>
-
-    <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('paste')">Paste Text</button>
-      <button class="tab-btn" onclick="switchTab('upload')">Upload File</button>
-    </div>
-
-    <div class="tab-panel active" id="tab-paste">
-      <div class="field">
-        <textarea id="resume-text" placeholder="Paste your current resume here. No resume yet? Just describe your recent work history, job titles, and years worked."></textarea>
-      </div>
-    </div>
-
-    <div class="tab-panel" id="tab-upload">
-      <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
-        <div class="upload-icon">📄</div>
-        <p>Drag and drop your resume here, or <strong>browse to upload</strong></p>
-        <p style="margin-top:6px; font-size:0.8rem;">Accepts PDF or Word (.docx) files</p>
-        <p class="file-chosen" id="file-name"></p>
-        <input type="file" id="file-input" accept=".pdf,.doc,.docx" onchange="handleFileSelect(event)"/>
-      </div>
-    </div>
-
-    <div id="spinner-wrap" class="spinner-wrap">
-      <div class="spinner"></div>
-      <p class="spinner-text">Analyzing your background and building your personalized intake form...</p>
-    </div>
-
-    <div id="generate-error" class="error-msg"></div>
-
-    <button class="btn-generate" id="btn-generate" onclick="generateIntake()">
-      Build My Personalized Intake Form →
-    </button>
+    <div id="load-error" class="error-msg"></div>
   </div>
 
-  <!-- STEP 3: INTAKE FORM (rendered dynamically) -->
-  <div class="card" id="intake-card">
-    <div class="section-label">
-      <span class="step-badge">3</span>
-      Your Personalized Intake
-    </div>
-    <p class="section-desc">
-      For each job, rate your skills, activities, and achievements using the Impact Score scale.<br/>
-      <strong style="color:var(--blue);">1</strong> = rarely used or beginner &nbsp;|&nbsp;
-      <strong style="color:var(--blue);">10</strong> = daily use and expert level
-    </p>
-
-    <div id="jobs-container"></div>
-
-    <!-- ESSAY QUESTIONS -->
-    <div id="essay-section" style="margin-top: 32px;">
-      <div class="checklist-title" style="font-size:1.1rem; margin-bottom:16px;">
-        Open-Ended Questions
-      </div>
-      <p class="checklist-subtitle" style="margin-bottom:20px;">
-        Take your time with these. The more detail you share, the stronger your resume bullets will be.
+  <div id="intake-section">
+    <div class="card">
+      <div class="section-label"><span class="step-badge">3</span>Your Personalized Intake</div>
+      <p class="section-desc">
+        Move each slider to show your experience level.
+        <strong style="color:var(--blue);">1</strong> = No experience &nbsp;|&nbsp;
+        <strong style="color:var(--blue);">10</strong> = Expert
       </p>
+      <div id="jobs-container"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-label"><span class="step-badge">4</span>Open-Ended Questions</div>
+      <p class="section-desc">Take your time. The more detail you share the better your resume bullets will be.</p>
       <div id="essay-container"></div>
     </div>
 
-    <!-- ADDITIONAL COMMENTS -->
-    <div style="margin-top: 32px;">
-      <div class="checklist-title" style="font-size:1.1rem; margin-bottom:8px;">
-        Anything Else?
-      </div>
-      <p class="checklist-subtitle" style="margin-bottom:14px;">
-        Awards, certifications, volunteer work, side projects, or anything you want me to know that did not fit above.
-      </p>
+    <div class="card">
+      <div class="section-label"><span class="step-badge">5</span>Anything Else?</div>
+      <p class="section-desc">Awards, certifications, volunteer work, side projects, or anything you want me to know.</p>
       <div class="field">
-        <textarea id="additional-comments" placeholder="Add any additional context, achievements, or information here..." style="min-height:100px;"></textarea>
+        <textarea id="additional-comments" placeholder="Add any additional context here..."></textarea>
       </div>
+      <div id="submit-error" class="error-msg"></div>
+      <button class="btn-submit" id="btn-submit" onclick="submitAnswers()">Submit My Intake Form</button>
     </div>
-
-    <div id="submit-error" class="error-msg"></div>
-
-    <button class="btn-submit" id="btn-submit" onclick="submitAnswers()">
-      Submit My Intake Form
-    </button>
   </div>
 
 </div>
+</div>
 
-<!-- SUCCESS -->
 <div class="container" id="success-card">
   <div class="card">
     <div class="success-icon">✨</div>
     <h2 class="success-title">You're all set!</h2>
     <p class="success-msg">
-      Thank you for trusting me with your career story. I have everything I need and will be in touch shortly with your polished resume.<br/><br/>
-      Questions in the meantime? Reach me at <a href="mailto:Maride@CreateYourResume.net">Maride@CreateYourResume.net</a>
+      Thank you for trusting me with your career story. I have everything I need and will be in touch shortly.<br/><br/>
+      Questions? Reach me at <a href="mailto:Maride@CreateYourResume.net">Maride@CreateYourResume.net</a>
     </p>
   </div>
 </div>
@@ -699,313 +178,170 @@
 </footer>
 
 <script>
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKmicQPfAumCoClqfBH2NnW7RRPHnH5LXd5FfKcZZxL1hPyIB3iG0vxy5ZI2SM6V-GlQ/exec';
-
-  let activeTab = 'paste';
-  let uploadedFileText = '';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzx2WYV0WIIlnzHxChuo4iJO8rDIKlv2CR0-8Bi0ELorW2F6xoLwwU1BcoIgrt7cxEsag/exec';
   let intakeData = null;
 
-  // ── TABS ──
-  function switchTab(tab) {
-    activeTab = tab;
-    document.querySelectorAll('.tab-btn').forEach((b, i) => {
-      b.classList.toggle('active', (i === 0 && tab === 'paste') || (i === 1 && tab === 'upload'));
-    });
-    document.getElementById('tab-paste').classList.toggle('active', tab === 'paste');
-    document.getElementById('tab-upload').classList.toggle('active', tab === 'upload');
-  }
-
-  // ── FILE UPLOAD ──
-  function handleFileSelect(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    document.getElementById('file-name').textContent = '✓ ' + file.name;
-    readFileAsText(file);
-  }
-
-  const dropZone = document.getElementById('drop-zone');
-  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragging'); });
-  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragging'));
-  dropZone.addEventListener('drop', e => {
+  const loadZone = document.getElementById('load-zone');
+  loadZone.addEventListener('dragover', e => { e.preventDefault(); loadZone.classList.add('dragging'); });
+  loadZone.addEventListener('dragleave', () => loadZone.classList.remove('dragging'));
+  loadZone.addEventListener('drop', e => {
     e.preventDefault();
-    dropZone.classList.remove('dragging');
+    loadZone.classList.remove('dragging');
     const file = e.dataTransfer.files[0];
-    if (file) {
-      document.getElementById('file-name').textContent = '✓ ' + file.name;
-      readFileAsText(file);
-    }
+    if (file) processFile(file);
   });
 
-  function readFileAsText(file) {
+  function loadIntakeFile(e) { if (e.target.files[0]) processFile(e.target.files[0]); }
+
+  function processFile(file) {
+    if (!file.name.endsWith('.json')) { showError('load-error', 'Please upload a .json file.'); return; }
     const reader = new FileReader();
-    reader.onload = e => { uploadedFileText = e.target.result; };
+    reader.onload = e => {
+      try {
+        intakeData = JSON.parse(e.target.result);
+        loadZone.classList.add('loaded');
+        loadZone.onclick = null;
+        const s = document.getElementById('load-success');
+        s.style.display = 'block';
+        s.textContent = '✓ Intake loaded for ' + (intakeData.clientName || 'client');
+        hideError('load-error');
+        renderIntake(intakeData);
+        const sec = document.getElementById('intake-section');
+        sec.classList.add('visible');
+        sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch(err) {
+        showError('load-error', 'Could not read this file. Make sure it is the correct intake file from your resume writer.');
+      }
+    };
     reader.readAsText(file);
   }
 
-  function getResumeContent() {
-    return activeTab === 'paste'
-      ? document.getElementById('resume-text').value.trim()
-      : uploadedFileText.trim();
-  }
-
-  // ── VALIDATE ──
-  function validateStep1() {
-    const name = document.getElementById('client-name').value.trim();
-    const email = document.getElementById('client-email').value.trim();
-    const jobTitle = document.getElementById('job-title').value.trim();
-    if (!name) return 'Please enter your full name.';
-    if (!email || !email.includes('@')) return 'Please enter a valid email address.';
-    if (!jobTitle) return 'Please enter your target job title or industry.';
-    return null;
-  }
-
-  // ── GENERATE INTAKE ──
-  async function generateIntake() {
-    const err = validateStep1();
-    if (err) { showError('generate-error', err); return; }
-
-    const resume = getResumeContent();
-    if (!resume) {
-      showError('generate-error', 'Please paste your resume text or upload a file before continuing.');
-      return;
-    }
-
-    hideError('generate-error');
-    setLoading(true);
-
-    try {
-      const response = await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          action: 'generateIntake',
-          jobTitle: document.getElementById('job-title').value.trim(),
-          resume: resume
-        })
-      });
-
-      const data = await response.json();
-      if (!data.success) throw new Error(data.error || 'Server error');
-
-      let parsed = data.intake;
-      if (typeof parsed === 'string') {
-        parsed = JSON.parse(parsed.replace(/```json|```/g, '').trim());
-      }
-
-      intakeData = parsed;
-      renderIntake(parsed);
-
-    } catch (err) {
-      showError('generate-error', 'Something went wrong building your intake form. Please try again or contact Maride directly.');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // ── RENDER INTAKE ──
   function renderIntake(data) {
-    const jobsContainer = document.getElementById('jobs-container');
-    jobsContainer.innerHTML = '';
-
-    data.jobs.forEach((job, jobIndex) => {
-      const block = document.createElement('div');
-      block.className = 'job-block';
-
-      block.innerHTML = `
-        <div class="job-header">
+    const jc = document.getElementById('jobs-container');
+    jc.innerHTML = '';
+    data.jobs.forEach((job, ji) => {
+      const b = document.createElement('div');
+      b.className = 'job-block';
+      b.innerHTML = `
+        <div class="job-head">
           <div>
-            <div class="job-title-text">${job.title} &mdash; ${job.company}</div>
-            <div class="job-years">${job.years}</div>
+            <div class="job-head-title">${esc(job.title)} &mdash; ${esc(job.company)}</div>
+            <div class="job-head-years">${esc(job.years)}</div>
           </div>
           <div class="job-badge">${job.isRecent ? 'Full Intake' : 'Summary Intake'}</div>
         </div>
         <div class="job-body">
-          ${renderChecklist(job.skills, 'Skills', 'Rate how proficient you were in each skill', jobIndex, 'skill')}
-          ${renderChecklist(job.activities, 'Activities & Responsibilities', 'Rate how frequently you performed each activity', jobIndex, 'activity')}
-          ${renderAchievements(job.achievements, jobIndex)}
-        </div>
-      `;
-
-      jobsContainer.appendChild(block);
+          ${ratingSection('Skills', job.skills, ji, 'skill', 'Rate your proficiency for each skill')}
+          ${ratingSection('Activities & Responsibilities', job.activities, ji, 'activity', 'Rate how frequently you performed each activity')}
+          ${achievementSection(job.achievements, ji)}
+        </div>`;
+      jc.appendChild(b);
     });
 
-    // ESSAY QUESTIONS
-    const essayContainer = document.getElementById('essay-container');
-    essayContainer.innerHTML = '';
+    const ec = document.getElementById('essay-container');
+    ec.innerHTML = '';
     data.essayQuestions.forEach((q, i) => {
-      const div = document.createElement('div');
-      div.className = 'essay-item';
-      div.innerHTML = `
-        <div class="essay-label">
-          <span class="essay-num">${i + 1}</span>
-          <span>${q}</span>
-        </div>
-        <textarea id="essay-${i}" placeholder="Share as much detail as you can..." rows="4"></textarea>
-      `;
-      essayContainer.appendChild(div);
+      const d = document.createElement('div');
+      d.className = 'essay-item';
+      d.innerHTML = `
+        <div class="essay-q"><span class="essay-num">${i+1}</span><span>${esc(q)}</span></div>
+        <textarea id="essay-${i}" placeholder="Share as much detail as you can..." rows="4"></textarea>`;
+      ec.appendChild(d);
     });
-
-    const card = document.getElementById('intake-card');
-    card.classList.add('visible');
-    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function renderChecklist(items, title, subtitle, jobIndex, type) {
-    const rows = items.map((item, i) => `
-      <div class="rating-item">
-        <div class="rating-item-left">
-          <div class="rating-item-text">${item.text}</div>
-          ${item.era_note ? `<div class="rating-item-note">${item.era_note}</div>` : ''}
-        </div>
-        <div class="rating-right">
-          <div class="rating-label-row">
-            <span>Beginner</span>
-            <span>Expert</span>
+  function ratingSection(title, items, ji, type, hint) {
+    return `<div class="sub-section">
+      <div class="sub-title">${title}</div>
+      <div class="sub-hint">${hint} — Impact Score 1 to 10</div>
+      ${items.map((item,i) => `
+        <div class="rating-item">
+          <div class="rating-text">${esc(item.text)}</div>
+          <div class="rating-control">
+            <div class="rating-labels"><span>No experience</span><span>Expert</span></div>
+            <input type="range" min="1" max="10" value="1" step="1" id="r-${ji}-${type}-${i}"
+              oninput="document.getElementById('v-${ji}-${type}-${i}').textContent=this.value"/>
+            <div class="rating-value" id="v-${ji}-${type}-${i}">1</div>
           </div>
-          <input type="range" min="1" max="10" value="5"
-            id="rating-${jobIndex}-${type}-${i}"
-            oninput="document.getElementById('val-${jobIndex}-${type}-${i}').textContent = this.value"/>
-          <div class="rating-value" id="val-${jobIndex}-${type}-${i}">5</div>
-        </div>
-      </div>
-    `).join('');
-
-    return `
-      <div class="checklist-section">
-        <div class="checklist-title">${title}</div>
-        <div class="checklist-subtitle">${subtitle} — Impact Score 1 to 10</div>
-        ${rows}
-      </div>
-    `;
+        </div>`).join('')}
+    </div>`;
   }
 
-  function renderAchievements(items, jobIndex) {
-    const rows = items.map((item, i) => `
-      <div class="rating-item">
-        <div class="rating-item-left">
-          <div class="rating-item-text">${item.text}</div>
-          <div class="${item.isReal ? 'rating-item-real' : 'rating-item-note'}">
-            ${item.isReal ? '✓ From your resume' : '✦ Suggested — confirm or modify below'}
+  function achievementSection(items, ji) {
+    return `<div class="sub-section">
+      <div class="sub-title">Achievements</div>
+      <div class="sub-hint">Rate how accurately each achievement reflects your experience</div>
+      ${items.map((item,i) => `
+        <div class="rating-item">
+          <div class="rating-text">
+            ${esc(item.text)}
+            <span class="${item.isReal ? 'badge-real' : 'badge-suggested'}">${item.isReal ? 'from your resume' : 'suggested'}</span>
           </div>
-        </div>
-        <div class="rating-right">
-          <div class="rating-label-row">
-            <span>Not me</span>
-            <span>Absolutely</span>
+          <div class="rating-control">
+            <div class="rating-labels"><span>Not me</span><span>Absolutely</span></div>
+            <input type="range" min="1" max="10" value="${item.isReal?10:1}" step="1" id="r-${ji}-achievement-${i}"
+              oninput="document.getElementById('v-${ji}-achievement-${i}').textContent=this.value"/>
+            <div class="rating-value" id="v-${ji}-achievement-${i}">${item.isReal?10:1}</div>
           </div>
-          <input type="range" min="1" max="10" value="${item.isReal ? '10' : '5'}"
-            id="rating-${jobIndex}-achievement-${i}"
-            oninput="document.getElementById('val-${jobIndex}-achievement-${i}').textContent = this.value"/>
-          <div class="rating-value" id="val-${jobIndex}-achievement-${i}">${item.isReal ? '10' : '5'}</div>
-        </div>
-      </div>
-    `).join('');
-
-    return `
-      <div class="checklist-section">
-        <div class="checklist-title">Achievements</div>
-        <div class="checklist-subtitle">Rate how accurately each achievement reflects your experience</div>
-        ${rows}
-      </div>
-    `;
+        </div>`).join('')}
+    </div>`;
   }
 
-  // ── COLLECT ALL RATINGS ──
   function collectRatings() {
-    const results = [];
-
-    intakeData.jobs.forEach((job, jobIndex) => {
-      const jobResult = {
-        job: `${job.title} at ${job.company} (${job.years})`,
-        skills: [],
-        activities: [],
-        achievements: []
-      };
-
-      job.skills.forEach((item, i) => {
-        const val = document.getElementById(`rating-${jobIndex}-skill-${i}`)?.value || '5';
-        jobResult.skills.push(`${item.text}: ${val}/10`);
-      });
-
-      job.activities.forEach((item, i) => {
-        const val = document.getElementById(`rating-${jobIndex}-activity-${i}`)?.value || '5';
-        jobResult.activities.push(`${item.text}: ${val}/10`);
-      });
-
-      job.achievements.forEach((item, i) => {
-        const val = document.getElementById(`rating-${jobIndex}-achievement-${i}`)?.value || '5';
-        jobResult.achievements.push(`${item.text} [${item.isReal ? 'Real' : 'Suggested'}]: ${val}/10`);
-      });
-
-      results.push(jobResult);
-    });
-
-    return JSON.stringify(results, null, 2);
+    return JSON.stringify(intakeData.jobs.map((job, ji) => ({
+      job: `${job.title} at ${job.company} (${job.years})`,
+      skills: job.skills.map((item,i) => `${item.text}: ${document.getElementById('r-'+ji+'-skill-'+i)?.value||1}/10`),
+      activities: job.activities.map((item,i) => `${item.text}: ${document.getElementById('r-'+ji+'-activity-'+i)?.value||1}/10`),
+      achievements: job.achievements.map((item,i) => `${item.text} [${item.isReal?'Real':'Suggested'}]: ${document.getElementById('r-'+ji+'-achievement-'+i)?.value||1}/10`)
+    })), null, 2);
   }
 
-  function collectEssayAnswers() {
-    return intakeData.essayQuestions.map((q, i) => {
-      const answer = document.getElementById(`essay-${i}`)?.value.trim() || '';
-      return `Q${i + 1}: ${q}\nA: ${answer}`;
-    }).join('\n\n');
+  function collectEssays() {
+    return intakeData.essayQuestions.map((q,i) =>
+      `Q${i+1}: ${q}\nA: ${document.getElementById('essay-'+i)?.value.trim()||''}`
+    ).join('\n\n');
   }
 
-  // ── SUBMIT ──
   async function submitAnswers() {
+    const name = document.getElementById('client-name').value.trim();
+    const email = document.getElementById('client-email').value.trim();
+    if (!name) { showError('submit-error','Please enter your full name.'); return; }
+    if (!email || !email.includes('@')) { showError('submit-error','Please enter a valid email address.'); return; }
+    if (!intakeData) { showError('submit-error','Please load your intake file first.'); return; }
+
     hideError('submit-error');
-    document.getElementById('btn-submit').disabled = true;
-    document.getElementById('btn-submit').textContent = 'Submitting...';
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
 
     try {
-      const response = await fetch(APPS_SCRIPT_URL, {
+      const res = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'submitAnswers',
-          name: document.getElementById('client-name').value.trim(),
-          email: document.getElementById('client-email').value.trim(),
-          jobTitle: document.getElementById('job-title').value.trim(),
-          resume: getResumeContent(),
+          name, email,
+          jobTitle: intakeData.jobTitle || '',
           jobRatings: collectRatings(),
-          essayAnswers: collectEssayAnswers(),
+          essayAnswers: collectEssays(),
           additionalComments: document.getElementById('additional-comments').value.trim()
         })
       });
-
-      const data = await response.json();
-      if (!data.success) throw new Error('Submission failed.');
-
+      const data = await res.json();
+      if (!data.success) throw new Error('failed');
       document.getElementById('main-form').style.display = 'none';
       document.getElementById('success-card').classList.add('visible');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    } catch (err) {
-      showError('submit-error', 'Something went wrong submitting your form. Please try again or email Maride directly.');
-      document.getElementById('btn-submit').disabled = false;
-      document.getElementById('btn-submit').textContent = 'Submit My Intake Form';
-      console.error(err);
+    } catch(err) {
+      showError('submit-error','Something went wrong. Please try again or email Maride directly.');
+      btn.disabled = false;
+      btn.textContent = 'Submit My Intake Form';
     }
   }
 
-  // ── HELPERS ──
-  function setLoading(on) {
-    document.getElementById('spinner-wrap').classList.toggle('visible', on);
-    document.getElementById('btn-generate').disabled = on;
-    document.getElementById('btn-generate').textContent = on
-      ? 'Building your intake form...'
-      : 'Build My Personalized Intake Form →';
-  }
-
-  function showError(id, msg) {
-    const el = document.getElementById(id);
-    el.textContent = msg;
-    el.classList.add('visible');
-  }
-
-  function hideError(id) {
-    document.getElementById(id).classList.remove('visible');
-  }
+  function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function showError(id,msg) { const e=document.getElementById(id); e.textContent=msg; e.classList.add('visible'); }
+  function hideError(id) { document.getElementById(id).classList.remove('visible'); }
 </script>
 </body>
 </html>
