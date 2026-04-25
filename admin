@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CYR Admin - Link Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream:#FAF6EE;--orange:#E8824A;--orange-dk:#C9622E;--blue:#5B9BB5;--blue-dk:#3D7A96;
+      --ink:#2C2C2C;--muted:#7A7368;--border:#E2D9CC;--white:#FFFFFF;
+      --green:#4A9B6F;--green-lt:#EAF5EE;
+      --shadow:0 4px 24px rgba(44,44,44,0.10);--radius:12px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--cream);font-family:'Lato',sans-serif;color:var(--ink);min-height:100vh;}
+
+    .header{background:linear-gradient(135deg,var(--blue-dk),var(--blue));padding:32px 24px;text-align:center;}
+    .header h1{font-family:'Playfair Display',Georgia,serif;font-size:1.8rem;font-weight:700;color:var(--white);}
+    .header h1 span{font-style:italic;opacity:0.85;}
+    .header p{color:rgba(255,255,255,0.7);font-size:0.85rem;margin-top:6px;letter-spacing:0.5px;}
+
+    .container{max-width:680px;margin:0 auto;padding:32px 20px 60px;}
+
+    .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:36px 40px;margin-bottom:20px;border:1px solid var(--border);}
+
+    .section-label{font-family:'Playfair Display',Georgia,serif;font-size:1.15rem;font-weight:700;color:var(--blue);margin-bottom:6px;}
+    .section-desc{font-size:0.85rem;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+
+    label{font-size:0.78rem;font-weight:700;color:var(--blue);letter-spacing:0.6px;text-transform:uppercase;display:block;margin-bottom:6px;}
+
+    input[type="password"],input[type="text"],textarea{
+      font-family:'Lato',sans-serif;font-size:0.95rem;color:var(--ink);
+      background:var(--cream);border:1.5px solid var(--border);border-radius:8px;
+      padding:12px 14px;width:100%;outline:none;
+      transition:border-color 0.2s,box-shadow 0.2s;
+    }
+    input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,155,181,0.15);background:var(--white);}
+    textarea{resize:vertical;min-height:280px;line-height:1.5;font-size:0.82rem;font-family:'Courier New',monospace;}
+
+    .field{margin-bottom:16px;}
+
+    .json-status{font-size:0.78rem;margin-top:6px;min-height:18px;font-style:italic;}
+    .json-status.ok{color:var(--green);}
+    .json-status.err{color:var(--orange-dk);}
+
+    .btn{
+      width:100%;padding:14px;
+      font-family:'Playfair Display',Georgia,serif;font-size:1rem;font-style:italic;
+      border:none;border-radius:var(--radius);cursor:pointer;
+      transition:transform 0.15s,box-shadow 0.15s,opacity 0.2s;
+      margin-top:8px;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--orange),var(--orange-dk));
+      color:var(--white);
+      box-shadow:0 4px 16px rgba(232,130,74,0.35);
+    }
+    .btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,130,74,0.4);}
+    .btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
+
+    .btn-copy{
+      background:var(--white);color:var(--blue);
+      border:2px solid var(--blue);
+      font-size:0.9rem;
+      margin-top:12px;
+    }
+    .btn-copy:hover{background:#EEF5F9;}
+    .btn-copy.copied{border-color:var(--green);color:var(--green);}
+
+    .result-box{
+      display:none;
+      background:var(--green-lt);
+      border:2px solid var(--green);
+      border-radius:var(--radius);
+      padding:24px 28px;
+      margin-top:20px;
+      animation:fadeUp 0.4s ease both;
+    }
+    .result-box.visible{display:block;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+    .result-label{font-size:0.75rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;}
+    .result-name{font-family:'Playfair Display',Georgia,serif;font-size:1.1rem;font-weight:700;color:var(--blue);margin-bottom:12px;}
+    .result-url{
+      font-family:'Courier New',monospace;font-size:0.82rem;
+      background:var(--white);border:1.5px solid var(--border);
+      border-radius:6px;padding:10px 12px;
+      word-break:break-all;color:var(--blue-dk);
+      margin-bottom:4px;
+    }
+
+    .error-box{
+      display:none;background:#FFF0ED;border:1.5px solid var(--orange);
+      border-radius:8px;padding:12px 16px;font-size:0.88rem;color:var(--orange-dk);margin-top:12px;
+    }
+    .error-box.visible{display:block;}
+
+    /* LOGIN OVERLAY */
+    #login-screen{position:fixed;inset:0;background:var(--cream);z-index:100;display:flex;align-items:center;justify-content:center;}
+    .login-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:48px 40px;width:100%;max-width:380px;border:1px solid var(--border);text-align:center;}
+    .login-card h2{font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;color:var(--blue);margin-bottom:6px;}
+    .login-card p{font-size:0.85rem;color:var(--muted);margin-bottom:28px;}
+    .login-error{font-size:0.82rem;color:var(--orange-dk);margin-top:10px;min-height:18px;}
+
+    .history-item{
+      border-bottom:1px solid var(--border);padding:12px 0;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+    }
+    .history-item:last-child{border-bottom:none;}
+    .history-name{font-weight:700;font-size:0.9rem;color:var(--ink);}
+    .history-meta{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+    .history-copy{
+      font-size:0.75rem;font-weight:700;color:var(--blue);
+      background:none;border:1.5px solid var(--blue);border-radius:20px;
+      padding:4px 12px;cursor:pointer;white-space:nowrap;
+      transition:background 0.2s;font-family:'Lato',sans-serif;
+    }
+    .history-copy:hover{background:#EEF5F9;}
+    .history-copy.copied{border-color:var(--green);color:var(--green);}
+    .history-empty{font-size:0.85rem;color:var(--muted);font-style:italic;text-align:center;padding:16px 0;}
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-screen">
+  <div class="login-card">
+    <h2>Admin Access</h2>
+    <p>Create Your Resume &mdash; Link Generator</p>
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPassword()"/>
+    </div>
+    <button class="btn btn-primary" onclick="checkPassword()">Sign In</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- MAIN ADMIN UI -->
+<div id="admin-ui" style="display:none;">
+
+  <div class="header">
+    <h1>Create <span>Your</span> Resume</h1>
+    <p>Admin &mdash; Client Link Generator</p>
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+      <div class="section-label">Generate a Client Link</div>
+      <p class="section-desc">Paste the client's intake JSON below. The tool will validate it, store it, and give you a unique link to send to the client.</p>
+
+      <div class="field">
+        <label for="json-input">Client Intake JSON</label>
+        <textarea id="json-input" placeholder='Paste the JSON here...' oninput="validateJSON()"></textarea>
+        <div class="json-status" id="json-status"></div>
+      </div>
+
+      <div id="generate-error" class="error-box"></div>
+
+      <button class="btn btn-primary" id="btn-generate" onclick="generateLink()" disabled>
+        Generate Client Link
+      </button>
+
+      <div class="result-box" id="result-box">
+        <div class="result-label">Link Ready</div>
+        <div class="result-name" id="result-name"></div>
+        <div class="result-url" id="result-url"></div>
+        <button class="btn btn-copy" id="btn-copy" onclick="copyLink()">Copy Link</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-label">Recently Generated Links</div>
+      <p class="section-desc">Links generated this session. Refresh the page and they will be gone, so copy before closing.</p>
+      <div id="history-list">
+        <div class="history-empty">No links generated yet this session.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7dn3DZxJ1KDs2IRHfm1jREK42m94mh75CDKO5UKjmIDd0KSi5zlHPTaM7nrtlplzk/exec';
+
+  // ── Simple password. Change this to whatever you want. ──
+  const ADMIN_PASSWORD = 'Zkgsahg';
+
+  let currentURL = '';
+  const sessionHistory = [];
+
+  // ── LOGIN ──
+  function checkPassword() {
+    const val = document.getElementById('password').value;
+    if (val === ADMIN_PASSWORD) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-ui').style.display = 'block';
+    } else {
+      document.getElementById('login-error').textContent = 'Incorrect password. Try again.';
+      document.getElementById('password').value = '';
+      document.getElementById('password').focus();
+    }
+  }
+
+  // ── JSON VALIDATION ──
+  function validateJSON() {
+    const raw = document.getElementById('json-input').value.trim();
+    const status = document.getElementById('json-status');
+    const btn = document.getElementById('btn-generate');
+
+    if (!raw) {
+      status.textContent = '';
+      status.className = 'json-status';
+      btn.disabled = true;
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(raw);
+
+      // Check required fields
+      const missing = [];
+      if (!parsed.clientName) missing.push('clientName');
+      if (!parsed.jobTitle) missing.push('jobTitle');
+      if (!Array.isArray(parsed.jobs) || parsed.jobs.length === 0) missing.push('jobs');
+      if (!Array.isArray(parsed.essayQuestions) || parsed.essayQuestions.length === 0) missing.push('essayQuestions');
+
+      if (missing.length > 0) {
+        status.textContent = 'Missing required fields: ' + missing.join(', ');
+        status.className = 'json-status err';
+        btn.disabled = true;
+      } else {
+        status.textContent = 'Valid JSON - ' + parsed.clientName + ' - ' + parsed.jobs.length + ' job(s)';
+        status.className = 'json-status ok';
+        btn.disabled = false;
+      }
+    } catch(e) {
+      status.textContent = 'Invalid JSON - ' + e.message;
+      status.className = 'json-status err';
+      btn.disabled = true;
+    }
+  }
+
+  // ── GENERATE LINK ──
+  async function generateLink() {
+    const raw = document.getElementById('json-input').value.trim();
+    const parsed = JSON.parse(raw);
+
+    const btn = document.getElementById('btn-generate');
+    btn.disabled = true;
+    btn.textContent = 'Generating...';
+
+    hideError('generate-error');
+    document.getElementById('result-box').classList.remove('visible');
+
+    try {
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'storeIntake',
+          clientName: parsed.clientName,
+          jobTitle: parsed.jobTitle,
+          intakeJSON: parsed
+        })
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || 'Unknown error');
+
+      currentURL = data.url;
+
+      document.getElementById('result-name').textContent = parsed.clientName + ' - ' + parsed.jobTitle;
+      document.getElementById('result-url').textContent = data.url;
+      document.getElementById('result-box').classList.add('visible');
+      document.getElementById('btn-copy').textContent = 'Copy Link';
+      document.getElementById('btn-copy').classList.remove('copied');
+
+      // Add to session history
+      addToHistory(parsed.clientName, parsed.jobTitle, data.url);
+
+      // Clear the textarea for next client
+      document.getElementById('json-input').value = '';
+      document.getElementById('json-status').textContent = '';
+      document.getElementById('json-status').className = 'json-status';
+
+    } catch(err) {
+      showError('generate-error', 'Could not generate link: ' + err.message);
+      console.error(err);
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Generate Client Link';
+    validateJSON();
+  }
+
+  // ── COPY LINK ──
+  function copyLink() {
+    navigator.clipboard.writeText(currentURL).then(() => {
+      const btn = document.getElementById('btn-copy');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy Link';
+        btn.classList.remove('copied');
+      }, 2500);
+    });
+  }
+
+  // ── SESSION HISTORY ──
+  function addToHistory(name, jobTitle, url) {
+    sessionHistory.unshift({ name, jobTitle, url, time: new Date() });
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('history-list');
+    if (sessionHistory.length === 0) {
+      list.innerHTML = '<div class="history-empty">No links generated yet this session.</div>';
+      return;
+    }
+    list.innerHTML = sessionHistory.map((entry, i) => `
+      <div class="history-item">
+        <div>
+          <div class="history-name">${esc(entry.name)}</div>
+          <div class="history-meta">${esc(entry.jobTitle)} &mdash; ${entry.time.toLocaleTimeString()}</div>
+        </div>
+        <button class="history-copy" id="hcopy-${i}" onclick="copyHistoryLink(${i})">Copy Link</button>
+      </div>
+    `).join('');
+  }
+
+  function copyHistoryLink(i) {
+    navigator.clipboard.writeText(sessionHistory[i].url).then(() => {
+      const btn = document.getElementById('hcopy-' + i);
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy Link';
+        btn.classList.remove('copied');
+      }, 2500);
+    });
+  }
+
+  function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function showError(id,msg){const e=document.getElementById(id);e.textContent=msg;e.classList.add('visible');}
+  function hideError(id){document.getElementById(id).classList.remove('visible');}
+</script>
+</body>
+</html>
