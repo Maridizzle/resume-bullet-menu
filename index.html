@@ -65,10 +65,38 @@
 
     .sub-section{margin-bottom:28px;}
     .sub-title{font-size:0.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.6px;border-bottom:1.5px solid var(--border);padding-bottom:6px;margin-bottom:6px;}
-    .sub-hint{font-size:0.78rem;color:var(--orange);font-style:italic;margin-bottom:12px;}
+    .sub-hint{font-size:0.78rem;color:var(--orange);font-style:italic;margin-bottom:4px;}
 
-    .rating-item{display:grid;grid-template-columns:1fr 200px;align-items:center;gap:20px;padding:10px 0;border-bottom:1px solid var(--border);}
+    /* ── CAP COUNTER ── */
+    .cap-counter{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:0.75rem;font-weight:700;
+      color:var(--blue);
+      background:#EEF5F9;
+      border:1.5px solid var(--blue);
+      border-radius:20px;
+      padding:3px 10px;
+      margin-bottom:12px;
+      transition:background 0.2s,color 0.2s,border-color 0.2s;
+    }
+    .cap-counter.at-cap{
+      background:#FFF0ED;
+      border-color:var(--orange);
+      color:var(--orange-dk);
+    }
+    .cap-counter .cap-dots{letter-spacing:1px;}
+
+    .rating-item{display:grid;grid-template-columns:1fr 200px;align-items:center;gap:20px;padding:10px 0;border-bottom:1px solid var(--border);transition:opacity 0.2s;}
     .rating-item:last-child{border-bottom:none;}
+    .rating-item.locked{opacity:0.38;pointer-events:none;}
+    .rating-item.locked .rating-text::after{
+      content:'Deselect another to unlock';
+      display:block;
+      font-size:0.7rem;
+      color:var(--muted);
+      font-style:italic;
+      margin-top:3px;
+    }
     .rating-text{font-size:0.9rem;color:var(--ink);line-height:1.4;}
     .badge-real{font-size:0.68rem;font-weight:700;background:var(--green-lt);color:var(--green);padding:1px 7px;border-radius:20px;margin-left:6px;vertical-align:middle;}
     .badge-suggested{font-size:0.68rem;font-weight:700;background:var(--yellow-lt);color:var(--yellow);padding:1px 7px;border-radius:20px;margin-left:6px;vertical-align:middle;}
@@ -180,7 +208,8 @@
     <p class="section-desc">
       Move each slider to show your experience level.
       <strong style="color:var(--blue);">1</strong> = No experience &nbsp;|&nbsp;
-      <strong style="color:var(--blue);">10</strong> = Expert
+      <strong style="color:var(--blue);">10</strong> = Expert<br/>
+      <span style="color:var(--orange-dk);font-weight:700;">Select your top picks in each section</span> &mdash; once you hit the limit, other items will lock until you free up a slot.
     </p>
     <div id="jobs-container"></div>
   </div>
@@ -229,6 +258,9 @@
 
 <script>
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7dn3DZxJ1KDs2IRHfm1jREK42m94mh75CDKO5UKjmIDd0KSi5zlHPTaM7nrtlplzk/exec';
+
+  // ── CAPS PER SECTION ──
+  const CAPS = { skill: 5, activity: 5, achievement: 3 };
 
   let intakeData = null;
   let clientId = null;
@@ -304,6 +336,22 @@
       jc.appendChild(b);
     });
 
+    // Wire up cap enforcement after DOM is ready
+    data.jobs.forEach((job, ji) => {
+      ['skill', 'activity', 'achievement'].forEach(type => {
+        const count = type === 'skill' ? job.skills.length
+                    : type === 'activity' ? job.activities.length
+                    : job.achievements.length;
+        for (let i = 0; i < count; i++) {
+          const slider = document.getElementById(`r-${ji}-${type}-${i}`);
+          if (slider) {
+            slider.addEventListener('input', () => enforceCap(ji, type, count));
+          }
+        }
+        enforceCap(ji, type, count);
+      });
+    });
+
     const ec = document.getElementById('essay-container');
     ec.innerHTML = '';
     data.essayQuestions.forEach((q, i) => {
@@ -316,12 +364,64 @@
     });
   }
 
+  // ── CAP ENFORCEMENT ──
+  // A slider is "selected" if its value > 1
+  function enforceCap(ji, type, count) {
+    const cap = CAPS[type];
+    const selectedIndices = [];
+
+    for (let i = 0; i < count; i++) {
+      const slider = document.getElementById(`r-${ji}-${type}-${i}`);
+      if (slider && parseInt(slider.value) > 1) selectedIndices.push(i);
+    }
+
+    const numSelected = selectedIndices.length;
+    const atCap = numSelected >= cap;
+
+    // Update the counter pill
+    const counterId = `cap-${ji}-${type}`;
+    const counter = document.getElementById(counterId);
+    if (counter) {
+      const dots = buildDots(numSelected, cap);
+      counter.innerHTML = `<span class="cap-dots">${dots}</span> ${numSelected} of ${cap} selected`;
+      counter.classList.toggle('at-cap', atCap);
+    }
+
+    // Lock or unlock unselected items
+    for (let i = 0; i < count; i++) {
+      const slider = document.getElementById(`r-${ji}-${type}-${i}`);
+      const item = slider ? slider.closest('.rating-item') : null;
+      if (!slider || !item) continue;
+
+      const isSelected = parseInt(slider.value) > 1;
+      if (atCap && !isSelected) {
+        item.classList.add('locked');
+        slider.disabled = true;
+      } else {
+        item.classList.remove('locked');
+        slider.disabled = false;
+      }
+    }
+  }
+
+  function buildDots(selected, cap) {
+    let s = '';
+    for (let i = 0; i < cap; i++) {
+      s += i < selected ? '●' : '○';
+    }
+    return s;
+  }
+
   function ratingSection(title, items, ji, type, hint) {
+    const cap = CAPS[type];
     return `<div class="sub-section">
       <div class="sub-title">${title}</div>
-      <div class="sub-hint">${hint} — Impact Score 1 to 10</div>
+      <div class="sub-hint">${hint} &mdash; Impact Score 1 to 10</div>
+      <div class="cap-counter" id="cap-${ji}-${type}">
+        <span class="cap-dots">${buildDots(0, cap)}</span> 0 of ${cap} selected
+      </div>
       ${items.map((item,i) => `
-        <div class="rating-item">
+        <div class="rating-item" id="item-${ji}-${type}-${i}">
           <div class="rating-text">${esc(item.text)}</div>
           <div class="rating-control">
             <div class="rating-labels"><span>No experience</span><span>Expert</span></div>
@@ -335,23 +435,31 @@
   }
 
   function achievementSection(items, ji) {
+    const cap = CAPS['achievement'];
     return `<div class="sub-section">
       <div class="sub-title">Achievements</div>
       <div class="sub-hint">Rate how accurately each achievement reflects your experience</div>
-      ${items.map((item,i) => `
-        <div class="rating-item">
+      <div class="cap-counter" id="cap-${ji}-achievement">
+        <span class="cap-dots">${buildDots(0, cap)}</span> 0 of ${cap} selected
+      </div>
+      ${items.map((item,i) => {
+        // Real achievements start at 10, so they begin "selected"
+        const startVal = item.isReal ? 10 : 1;
+        return `
+        <div class="rating-item" id="item-${ji}-achievement-${i}">
           <div class="rating-text">
             ${esc(item.text)}
             <span class="${item.isReal?'badge-real':'badge-suggested'}">${item.isReal?'from your resume':'suggested'}</span>
           </div>
           <div class="rating-control">
             <div class="rating-labels"><span>Not me</span><span>Absolutely</span></div>
-            <input type="range" min="1" max="10" value="${item.isReal?10:1}" step="1"
+            <input type="range" min="1" max="10" value="${startVal}" step="1"
               id="r-${ji}-achievement-${i}"
               oninput="document.getElementById('v-${ji}-achievement-${i}').textContent=this.value"/>
-            <div class="rating-value" id="v-${ji}-achievement-${i}">${item.isReal?10:1}</div>
+            <div class="rating-value" id="v-${ji}-achievement-${i}">${startVal}</div>
           </div>
-        </div>`).join('')}
+        </div>`;
+      }).join('')}
     </div>`;
   }
 
@@ -399,6 +507,13 @@
           const valEl = document.getElementById(valId);
           if (valEl) valEl.textContent = val;
         }
+      });
+
+      // Re-enforce caps after restoring all values
+      intakeData.jobs.forEach((job, ji) => {
+        enforceCap(ji, 'skill', job.skills.length);
+        enforceCap(ji, 'activity', job.activities.length);
+        enforceCap(ji, 'achievement', job.achievements.length);
       });
     }
 
